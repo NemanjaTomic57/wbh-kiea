@@ -1,0 +1,75 @@
+Besonderheit der Karte:
+Die eigene Karte ist groesser als 10 x 10 und kombiniert zwei Depots, drei Lieferziele, Engstellen, Sackgassen und alternative Routen. Dadurch koennen Agenten einander blockieren, ohne dass Ziele grundsaetzlich unerreichbar sind.
+
+Karte direkt nach Initialisierung und Agentenplatzierung:
+####################
+#D....#.......4....#
+#.###.#.#####.###..#
+#.....#.....#.....2#
+#.#####.###.#.###..#
+#.......#...#......#
+#.#####.#.#####.##.#
+#..Z....#.....#....#
+#1###.#####.#.###..#
+#....#.....#....3..#
+#.##.#.###.#####...#
+#......Z...........#
+####################
+
+Agentenstatus:
+A1: Typ=Standard, Position=Position(x=1, y=8), Geschwindigkeit=1, Kapazitaet=2, Ladung=0, Batterie=20, Ausgeliefert=0
+A2: Typ=Standard, Position=Position(x=18, y=3), Geschwindigkeit=1, Kapazitaet=2, Ladung=0, Batterie=20, Ausgeliefert=0
+A3: Typ=Express, Position=Position(x=16, y=9), Geschwindigkeit=2, Kapazitaet=1, Ladung=0, Batterie=14, Ausgeliefert=0
+A4: Typ=Express, Position=Position(x=14, y=1), Geschwindigkeit=2, Kapazitaet=1, Ladung=0, Batterie=14, Ausgeliefert=0
+Schritt 1: A1 faehrt von Position(x=1, y=8) nach Position(x=1, y=7).
+Schritt 1: A2 faehrt von Position(x=18, y=3) nach Position(x=17, y=3).
+Schritt 1: A3 nimmt ein Paket auf.
+Schritt 1: A4 faehrt von Position(x=14, y=1) nach Position(x=15, y=1).
+Schritt 1: A4 faehrt von Position(x=15, y=1) nach Position(x=14, y=1).
+Schritt 2: A1 faehrt von Position(x=1, y=7) nach Position(x=1, y=8).
+Schritt 2: A2 faehrt von Position(x=17, y=3) nach Position(x=17, y=2).
+Schritt 2: A3 faehrt von Position(x=16, y=9) nach Position(x=15, y=9).
+Schritt 2: A3 faehrt von Position(x=15, y=9) nach Position(x=16, y=9).
+Schritt 2: A4 faehrt von Position(x=14, y=1) nach Position(x=15, y=1).
+Schritt 2: A4 faehrt von Position(x=15, y=1) nach Position(x=16, y=1).
+Schritt 3: A1 sendet eine Nachricht an A3.
+Schritt 3: A2 sendet eine Nachricht an A3.
+Schritt 3: A3 sendet eine Nachricht an A1.
+Schritt 3: A4 sendet eine Nachricht an A1.
+Schritt 4: A1 liest Nachricht von A3: Status von A3: Position Position(x=16, y=9)
+Schritt 4: A1 liest Nachricht von A4: Status von A4: Position Position(x=16, y=1)
+Schritt 4: A1 faehrt von Position(x=1, y=8) nach Position(x=1, y=7).
+Schritt 4: A2 faehrt von Position(x=17, y=2) nach Position(x=17, y=3).
+Schritt 4: A3 liest Nachricht von A1: Status von A1: Position Position(x=1, y=8)
+Schritt 4: A3 liest Nachricht von A2: Status von A2: Position Position(x=17, y=2)
+Schritt 4: A3 faehrt von Position(x=16, y=9) nach Position(x=16, y=10).
+Schritt 4: A3 faehrt von Position(x=16, y=10) nach Position(x=16, y=9).
+Schritt 4: A4 faehrt von Position(x=16, y=1) nach Position(x=17, y=1).
+Schritt 4: A4 faehrt von Position(x=17, y=1) nach Position(x=18, y=1).
+Schritt 5: A1 faehrt von Position(x=1, y=7) nach Position(x=1, y=8).
+Schritt 5: A2 faehrt von Position(x=17, y=3) nach Position(x=17, y=2).
+Schritt 5: A3 faehrt von Position(x=16, y=9) nach Position(x=15, y=9).
+Schritt 5: A3 faehrt von Position(x=15, y=9) nach Position(x=14, y=9).
+Schritt 5: A4 faehrt von Position(x=18, y=1) nach Position(x=18, y=2).
+Schritt 5: A4 faehrt von Position(x=18, y=2) nach Position(x=18, y=1).
+
+Karte nach 5 Simulationsschritten:
+####################
+#D....#.......Z...4#
+#.###.#.#####.###2.#
+#.....#.....#......#
+#.#####.###.#.###..#
+#.......#...#......#
+#.#####.#.#####.##.#
+#..Z....#.....#....#
+#1###.#####.#.###..#
+#....#.....#..3.D..#
+#.##.#.###.#####...#
+#......Z...........#
+####################
+
+Agentenstatus:
+A1: Typ=Standard, Position=Position(x=1, y=8), Geschwindigkeit=1, Kapazitaet=2, Ladung=0, Batterie=16, Ausgeliefert=0
+A2: Typ=Standard, Position=Position(x=17, y=2), Geschwindigkeit=1, Kapazitaet=2, Ladung=0, Batterie=16, Ausgeliefert=0
+A3: Typ=Express, Position=Position(x=14, y=9), Geschwindigkeit=2, Kapazitaet=1, Ladung=1, Batterie=8, Ausgeliefert=0
+A4: Typ=Express, Position=Position(x=18, y=1), Geschwindigkeit=2, Kapazitaet=1, Ladung=0, Batterie=6, Ausgeliefert=0
