@@ -11,20 +11,31 @@ genauso wie eine grafische Oberfläche wählen.
 
 ## Karte
 
-Diese Karte enthält mehrere Engstellen, Sackgassen und alternative Verbindungswege zwischen den beiden Depots und den Lieferzielen. Dadurch entstehen Situationen, in denen Agenten konkurrierende Routen wählen und sich gegenseitig blockieren können. Die Karte eignet sich daher gut zur Untersuchung der Wegplanung mit A*, der späteren Kollisionsvermeidung sowie der Auftragsvergabe zwischen mehreren Agenten.
+###############################################
+#.............#######.........................#
+#....#.....Z..............D.....####..........#
+#....#........#######.....#........#.....Z....#
+#....##########...........#........#..........#
+#.........................#..Z.....#.....#....#
+#.#.....#.....#######.....#######..#.....#....#
+#########........#.................#######....#
+#.Z.....#..#.....#..............#.............#
+#................########.......##########....#
+#................#.....Z#................#....#
+#...#####........#......########D........#....#
+#....#........####......#......#......#########
+######...........#......#......#.........Z....#
+#......D####.....#.............#####..........#
+#................#...######...................#
+###############################################
 
-####################
-#D....#.......Z....#
-#.###.#.#####.###..#
-#.....#.....#......#
-#.#####.###.#.###..#
-#.......#...#......#
-#.#####.#.#####.##.#
-#..Z....#.....#....#
-#.###.#####.#.###..#
-#....#.....#....D..#
-#.##.#.###.#####...#
-#......Z...........#
-####################
+Besonderheiten der Karte:
+
+Die Karte wurde auf 15 × 15 Felder erweitert und enthält mehrere Besonderheiten, die die Routenplanung anspruchsvoller machen. Die zahlreichen Wände bilden Engstellen, Sackgassen und voneinander getrennte Bereiche, sodass Agenten häufig Umwege fahren müssen und nicht immer den direkten Weg zum Ziel wählen können.
+
+Insgesamt sind drei Depots (D) und fünf Lieferziele (Z) auf der Karte verteilt. Diese befinden sich in unterschiedlichen Bereichen der Karte, wodurch längere Transportwege entstehen und eine sinnvolle Auswahl des nächstgelegenen Depots sowie eine effiziente Reihenfolge der Lieferungen erforderlich wird.
+
+Zusätzlich gibt es sowohl große freie Flächen als auch stark blockierte Bereiche. Dadurch existieren mehrere mögliche Routen zwischen Start- und Zielpunkten, deren Länge und Aufwand sich deutlich unterscheiden. Die Karte eignet sich daher gut, um Pfadfindungsalgorithmen hinsichtlich ihrer Effizienz und ihrer Fähigkeit zu testen, Hindernisse zu umgehen und geeignete Alternativrouten zu finden.
+
 
 
