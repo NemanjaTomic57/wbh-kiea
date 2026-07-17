@@ -141,7 +141,7 @@ def main():
 
     print_map(MAP, agents)
 
-    print(get_depot_positions(MAP))
+    depots = get_depot_positions(MAP)
 
     for _ in range(5):
         time.sleep(1)
@@ -149,7 +149,6 @@ def main():
             possible_moves = get_possible_moves(MAP, agent)
             move_agent(agent, possible_moves)
 
-        # print_map(MAP, agents)
     print_map(MAP, agents)
 
 if __name__ == "__main__":
