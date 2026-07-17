@@ -60,14 +60,6 @@ class ExpressAgent(Agent):
             color=RED
         )
 
-def get_free_positions(map_data):
-    return [
-        (x, y)
-        for y, row in enumerate(map_data)
-        for x, cell in enumerate(row)
-        if cell == "."
-    ]
-
 def print_map(map_data, agents):
     rendered_map = [list(row) for row in map_data]
 
@@ -78,6 +70,22 @@ def print_map(map_data, agents):
 
     for row in rendered_map:
         print(" ".join(row))
+
+def get_free_positions(map_data):
+    return [
+        (x, y)
+        for y, row in enumerate(map_data)
+        for x, cell in enumerate(row)
+        if cell == "."
+    ]
+
+def get_depot_positions(map_data):
+    return [
+        (x, y)
+        for y, row in enumerate(map_data)
+        for x, cell in enumerate(row)
+        if cell == "D"
+    ]
 
 def get_possible_moves(map_data, agent):
     matrix = [list(row) for row in map_data]
@@ -95,6 +103,9 @@ def get_possible_moves(map_data, agent):
 
     return possible_moves
 
+def manhattan(a, b):
+    return sum(abs(x-y) for x, y in zip(a, b))
+
 def move_agent(agent, possible_moves):
     move = random.sample(possible_moves, 1)
     
@@ -110,16 +121,6 @@ def move_agent(agent, possible_moves):
         case _:
             print(f"error -> could not determine move: {move}")
     print(f"Agent {agent.id} moved {move[0]}")
-
-def get_depot_positions(map_data):
-    positions = []
-
-    for y, row in enumerate(map_data):
-        for x, cell in enumerate(row):
-            if cell == "D":
-                positions.append((x, y))
-
-    return positions
 
 def main():
     positions = random.sample(get_free_positions(MAP), 2)
@@ -142,13 +143,14 @@ def main():
 
     print(get_depot_positions(MAP))
 
-    while True:
+    for _ in range(5):
         time.sleep(1)
         for agent in agents:
             possible_moves = get_possible_moves(MAP, agent)
             move_agent(agent, possible_moves)
 
-        print_map(MAP, agents)
+        # print_map(MAP, agents)
+    print_map(MAP, agents)
 
 if __name__ == "__main__":
     main()
