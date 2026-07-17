@@ -1,6 +1,7 @@
 import random
 import time
 from dataclasses import dataclass
+from typing import Optional
 
 GREEN = "\033[32m"
 RED = "\033[31m"
@@ -25,6 +26,15 @@ MAP = (
     "#........#####...........#",
     "##########################"
 )
+
+@dataclass
+class Task:
+    id: int
+    depot_x: int
+    depot_y: int
+    dest_x: int
+    dest_y: int
+    agent_id: Optional[int] = None
 
 @dataclass
 class Agent:
@@ -71,6 +81,20 @@ def print_map(map_data, agents):
     for row in rendered_map:
         print(" ".join(row))
 
+def create_agents():
+    positions = random.sample(get_free_positions(MAP), 2)
+    standard_agent = StandardAgent(
+        id=0,
+        x=positions[0][0],
+        y=positions[0][1]
+    )
+    express_agent = ExpressAgent(
+        id=1,
+        x=positions[1][0],
+        y=positions[1][1]
+    )
+    return [standard_agent, express_agent]
+
 def get_free_positions(map_data):
     return [
         (x, y)
@@ -87,69 +111,58 @@ def get_depot_positions(map_data):
         if cell == "D"
     ]
 
-def get_possible_moves(map_data, agent):
-    matrix = [list(row) for row in map_data]
-
-    # Check for left, up, right and down if there is a wall
-    possible_moves = []
-    if matrix[agent.y][agent.x-1] != "#":
-        possible_moves.append("left")
-    if matrix[agent.y-1][agent.x] != "#":
-        possible_moves.append("up")
-    if matrix[agent.y][agent.x+1] != "#":
-        possible_moves.append("right")
-    if matrix[agent.y+1][agent.x] != "#":
-        possible_moves.append("down")
-
-    return possible_moves
+def get_destination_positions(map_data):
+    return [
+        (x, y)
+        for y, row in enumerate(map_data)
+        for x, cell in enumerate(row)
+        if cell == "Z"
+    ]
 
 def manhattan(a, b):
     return sum(abs(x-y) for x, y in zip(a, b))
 
-def move_agent(agent, possible_moves):
-    move = random.sample(possible_moves, 1)
+def deploy_package(id):
+    depots = get_depot_positions(MAP)
+    destinations = get_destination_positions(MAP)
     
-    match move[0]:
-        case "left":
-            agent.x -= 1
-        case "up":
-            agent.y -= 1
-        case "right":
-            agent.x += 1
-        case "down":
-            agent.y += 1
-        case _:
-            print(f"error -> could not determine move: {move}")
-    print(f"Agent {agent.id} moved {move[0]}")
+    depot_x, depot_y = random.sample(depots, k=1)[0]
+    dest_x, dest_y = random.sample(destinations, k=1)[0]
+
+    print(
+        f"ANNOUNCE(task_id={id}, "
+        f"depot=({depot_x}, {depot_y}), "
+        f"dest=({dest_x}, {dest_y}))"
+    )
+    package = Task(
+        id=id,
+        depot_x=depot_x,
+        depot_y=depot_y,
+        dest_x=dest_x,
+        dest_y=dest_y
+    )
+    return package
+
+def perform_bidding(agents, tasks):
+    unassigned_tasks = [t for t in tasks if t.agent_id == None]
+
+    for task in unassigned_tasks:
+        print(task)
 
 def main():
-    positions = random.sample(get_free_positions(MAP), 2)
+    tasks: list[Task] = []
+    agents = create_agents()
+    round = 0
+    task_id = 0
 
-    standard_agent = StandardAgent(
-        id=0,
-        x=positions[0][0],
-        y=positions[0][1]
-    )
-
-    express_agent = ExpressAgent(
-        id=1,
-        x=positions[1][0],
-        y=positions[1][1]
-    )
-
-    agents = [standard_agent, express_agent]
-
-    print_map(MAP, agents)
-
-    depots = get_depot_positions(MAP)
-
-    for _ in range(5):
+    while True:
         time.sleep(1)
-        for agent in agents:
-            possible_moves = get_possible_moves(MAP, agent)
-            move_agent(agent, possible_moves)
+        round += 1
 
-    print_map(MAP, agents)
+        if round % 2 == 0:
+            tasks.append(deploy_package(task_id))
+            perform_bidding(agents, tasks)
+            task_id += 1
 
 if __name__ == "__main__":
     main()
