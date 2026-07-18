@@ -1,0 +1,18 @@
+Ergebnisnachweis: Fuenf Bieterrunden
+Ausgefuehrt mit random.seed(42). Die Kosten sind die Weglaenge
+Agent -> Depot plus Depot -> Lieferziel.
+
+Runde | Ausschreibung | Manager         | Zahl der Bieter | Gewinner | Gebotene Kosten
+------|---------------|-----------------|-----------------|----------|----------------
+1     | Auftrag 0     | DispatchManager | 2               | Agent 0  | 28
+2     | Auftrag 1     | DispatchManager | 2               | Agent 1  | 23
+3     | Auftrag 2     | DispatchManager | 2               | Agent 1  | 27
+4     | Auftrag 3     | DispatchManager | 2               | Agent 0  | 30
+5     | Auftrag 4     | DispatchManager | 2               | Agent 0  | 50
+
+Konsolenausgabe je Runde:
+AUKTIONSERGEBNIS Runde=1, Auftrag=0, Manager=DispatchManager, Bieter=2, Gewinner=Agent 0, GeboteneKosten=28
+AUKTIONSERGEBNIS Runde=2, Auftrag=1, Manager=DispatchManager, Bieter=2, Gewinner=Agent 1, GeboteneKosten=23
+AUKTIONSERGEBNIS Runde=3, Auftrag=2, Manager=DispatchManager, Bieter=2, Gewinner=Agent 1, GeboteneKosten=27
+AUKTIONSERGEBNIS Runde=4, Auftrag=3, Manager=DispatchManager, Bieter=2, Gewinner=Agent 0, GeboteneKosten=30
+AUKTIONSERGEBNIS Runde=5, Auftrag=4, Manager=DispatchManager, Bieter=2, Gewinner=Agent 0, GeboteneKosten=50
