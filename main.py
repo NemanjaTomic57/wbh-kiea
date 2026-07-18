@@ -1,168 +1,72 @@
 import random
 import time
+import heapq
+from enum import Enum, auto
+from dataclasses import field
+from collections import deque
 from dataclasses import dataclass
 from typing import Optional
 
-GREEN = "\033[32m"
-RED = "\033[31m"
-RESET = "\033[0m"
+from agent import Agent, AgentState, create_agents
+from task import Task, create_task
+from map import *
 
-MAP = (
-    "##########################",
-    "#........................#",
-    "#....#..Z....D.....####..#",
-    "#....#.......#........#.Z#",
-    "#....######..#........#..#",
-    "#............#........#..#",
-    "#............#######..#..#",
-    "#######..#............#..#",
-    "#.Z......#...............#",
-    "#........####......#######",
-    "#....#...#Z.#............#",
-    "#....#...#..#...###......#",
-    "#....#...#..#.....#......#",
-    "######...#..#.....#....D.#",
-    "#......D.#........#####..#",
-    "#........#####...........#",
-    "##########################"
-)
-
-@dataclass
-class Task:
-    id: int
-    depot_x: int
-    depot_y: int
-    dest_x: int
-    dest_y: int
-    agent_id: Optional[int] = None
-
-@dataclass
-class Agent:
-    id: int
-    x: int
-    y: int
-    speed: int
-    capacity: int
-    battery: int
-    color: str
-
-class StandardAgent(Agent):
-    def __init__(self, id: int, x: int, y: int):
-        super().__init__(
-            id=id,
-            x=x,
-            y=y,
-            speed=1,
-            capacity=5,
-            battery=100,
-            color=GREEN
-        )
-
-class ExpressAgent(Agent):
-    def __init__(self, id: int, x: int, y: int):
-        super().__init__(
-            id=id,
-            x=x,
-            y=y,
-            speed=2,
-            capacity=3,
-            battery=80,
-            color=RED
-        )
-
-def print_map(map_data, agents):
-    rendered_map = [list(row) for row in map_data]
-
-    for agent in agents:
-        rendered_map[agent.y][agent.x] = (
-            f"{agent.color}{agent.id}{RESET}"
-        )
-
-    for row in rendered_map:
-        print(" ".join(row))
-
-def create_agents():
-    positions = random.sample(get_free_positions(MAP), 2)
-    standard_agent = StandardAgent(
-        id=0,
-        x=positions[0][0],
-        y=positions[0][1]
-    )
-    express_agent = ExpressAgent(
-        id=1,
-        x=positions[1][0],
-        y=positions[1][1]
-    )
-    return [standard_agent, express_agent]
-
-def get_free_positions(map_data):
-    return [
-        (x, y)
-        for y, row in enumerate(map_data)
-        for x, cell in enumerate(row)
-        if cell == "."
+def determine_winner(agents: list[Agent], task: Task) -> Optional[Agent]:
+    candidates = [
+        agent
+        for agent in agents
+        if agent.state == AgentState.IDLE
     ]
 
-def get_depot_positions(map_data):
-    return [
-        (x, y)
-        for y, row in enumerate(map_data)
-        for x, cell in enumerate(row)
-        if cell == "D"
-    ]
+    if not candidates:
+        return None
 
-def get_destination_positions(map_data):
-    return [
-        (x, y)
-        for y, row in enumerate(map_data)
-        for x, cell in enumerate(row)
-        if cell == "Z"
-    ]
-
-def manhattan(a, b):
-    return sum(abs(x-y) for x, y in zip(a, b))
-
-def deploy_package(id):
-    depots = get_depot_positions(MAP)
-    destinations = get_destination_positions(MAP)
-    
-    depot_x, depot_y = random.sample(depots, k=1)[0]
-    dest_x, dest_y = random.sample(destinations, k=1)[0]
-
-    print(
-        f"ANNOUNCE(task_id={id}, "
-        f"depot=({depot_x}, {depot_y}), "
-        f"dest=({dest_x}, {dest_y}))"
+    return min(
+        candidates,
+        key=lambda agent: shortest_path(
+            (agent.x, agent.y),
+            (task.depot_x, task.depot_y),
+        ),
     )
-    package = Task(
-        id=id,
-        depot_x=depot_x,
-        depot_y=depot_y,
-        dest_x=dest_x,
-        dest_y=dest_y
-    )
-    return package
 
-def perform_bidding(agents, tasks):
-    unassigned_tasks = [t for t in tasks if t.agent_id == None]
+def perform_bidding(agents: list[Agent], tasks: list[Task]):
+    for task in tasks:
+        if task.agent_id is not None:
+            continue
 
-    for task in unassigned_tasks:
-        print(task)
+        winner = determine_winner(agents, task)
+
+        if winner is None:
+            continue
+
+        task.agent_id = winner.id
+        winner.assign_task(task)
+
+        print(f"Task {task.id} assigned to Agent {winner.id}")
 
 def main():
     tasks: list[Task] = []
-    agents = create_agents()
+    agents = create_agents(n=2)
     round = 0
     task_id = 0
 
+    for _ in range(2):
+        tasks.append(create_task(task_id))
+        task_id += 1
+
     while True:
-        time.sleep(1)
+        perform_bidding(agents, tasks)
+
+        for agent in agents:
+            agent.update()
+
+        print_map(MAP, agents)
+
         round += 1
 
-        if round % 2 == 0:
-            tasks.append(deploy_package(task_id))
-            perform_bidding(agents, tasks)
-            task_id += 1
+        time.sleep(1)
+
+    print_route(agents[0].route)
 
 if __name__ == "__main__":
     main()
