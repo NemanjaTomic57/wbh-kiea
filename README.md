@@ -27,23 +27,32 @@ weitergegeben; erst dann berechnet A* den konkreten Weg.
 
 ### Ergebnisnachweis: konkrete verwendete Abfragen
 
-Die folgenden Antworten gelten fuer die in `constants.py` hinterlegte Karte:
+Der Nachweis ist mit der aktuellen Karte reproduzierbar. Das Skript
+[`prolog_evidence.py`](prolog_evidence.py) erzeugt normale `Task`- und
+`Agent`-Objekte und ruft ausschliesslich die beiden Methoden auf, die auch
+`determine_winner` in `main.py` verwendet:
 
-```prolog
-?- reachable((2,2),(8,2)).
-true.
-
-?- reachable((2,2),(0,0)).
-false.
+```bash
+python prolog_evidence.py
 ```
 
-Beispiel einer Laufzeitabfrage (Fakten werden durch `PrologBridge` erzeugt):
+Die dabei ausgefuehrten PROLOG-Abfragen und erwarteten Antworten sind:
 
 ```prolog
+?- reachable((21,3),(8,2)).
+true.
+
 ?- task(7,21,3,8,2,1), agent(0,2,2,5,100,idle),
    agent(1,20,3,3,80,idle), candidate_agent(task(7), Agent).
 Agent = 1.
 ```
+
+Die erste Abfrage ist die Erreichbarkeitspruefung zwischen Depot und Ziel,
+unmittelbar bevor A* einen Weg plant. Die zweite Abfrage waehlt Agent 1: Er
+steht einen Schritt vom Depot entfernt, ist frei, besitzt Kapazitaet 3 fuer das
+Paketgewicht 1 und hat mit Batterie 80 genug Energie fuer Anfahrt und Lieferung.
+Damit ist der Ergebnisnachweis nicht nur ein isoliertes REPL-Beispiel, sondern
+ein reproduzierbarer Ablauf der tatsächlich eingebundenen Simulation.
 
 In dieser B-Aufgabe implementieren Sie ein kleines Logistik-Simulationsspiel mit Agenten:
 Mehrere Lieferroboter (Agenten) bewegen sich auf einer diskreten Karte, verteilen Lieferaufträge
@@ -81,4 +90,3 @@ Die Karte wurde auf 15 × 15 Felder erweitert und enthält mehrere Besonderheite
 Insgesamt sind drei Depots (D) und fünf Lieferziele (Z) auf der Karte verteilt. Diese befinden sich in unterschiedlichen Bereichen der Karte, wodurch längere Transportwege entstehen und eine sinnvolle Auswahl des nächstgelegenen Depots sowie eine effiziente Reihenfolge der Lieferungen erforderlich wird.
 
 Zusätzlich gibt es sowohl große freie Flächen als auch stark blockierte Bereiche. Dadurch existieren mehrere mögliche Routen zwischen Start- und Zielpunkten, deren Länge und Aufwand sich deutlich unterscheiden. Die Karte eignet sich daher gut, um Pfadfindungsalgorithmen hinsichtlich ihrer Effizienz und ihrer Fähigkeit zu testen, Hindernisse zu umgehen und geeignete Alternativrouten zu finden.
-
