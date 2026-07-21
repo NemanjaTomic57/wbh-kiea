@@ -11,6 +11,7 @@ class Task:
     depot_y: int
     dest_x: int
     dest_y: int
+    weight: int = 1
     agent_id: Optional[int] = None
 
 def create_task(id):
@@ -30,6 +31,7 @@ def create_task(id):
         depot_x=depot_x,
         depot_y=depot_y,
         dest_x=dest_x,
-        dest_y=dest_y
+        dest_y=dest_y,
+        weight=1,
     )
     return package
