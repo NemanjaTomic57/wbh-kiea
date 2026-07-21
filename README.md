@@ -54,15 +54,6 @@ Paketgewicht 1 und hat mit Batterie 80 genug Energie fuer Anfahrt und Lieferung.
 Damit ist der Ergebnisnachweis nicht nur ein isoliertes REPL-Beispiel, sondern
 ein reproduzierbarer Ablauf der tatsächlich eingebundenen Simulation.
 
-In dieser B-Aufgabe implementieren Sie ein kleines Logistik-Simulationsspiel mit Agenten:
-Mehrere Lieferroboter (Agenten) bewegen sich auf einer diskreten Karte, verteilen Lieferaufträge
-untereinander und planen ihre Wege mit A*.
-
-Sofern nicht anders angegeben, können Sie die Programmiersprache für die Lösung frei wählen.
-Achten Sie aber darauf, eine betriebssystemunabhängige Lösung zu wählen. Bei der Wahl der
-Darstellung sind Sie ebenfalls frei, d. h., Sie können eine einfache Text-Ausgabe auf der Konsole
-genauso wie eine grafische Oberfläche wählen.
-
 ## Karte
 
 ###############################################
